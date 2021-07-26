@@ -20,6 +20,5 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
+Route.get('/profile', 'UsersController.index')
+Route.post('/register', 'UsersController.create');

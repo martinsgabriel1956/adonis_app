@@ -22,3 +22,4 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/profile', 'UsersController.index')
 Route.post('/register', 'UsersController.create');
+Route.post('/login', 'UsersController.login');

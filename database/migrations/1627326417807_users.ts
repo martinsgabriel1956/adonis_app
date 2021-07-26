@@ -5,10 +5,11 @@ export default class Users extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id');
-      table.string('name');
-      table.string('email');
-      table.string('password');
+      table.increments('id').primary();
+      table.string('name', 255).notNullable();
+      table.string('email', 180).notNullable();
+      table.string('password').notNullable();
+      table.string('remember_me_token').nullable();
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

@@ -23,4 +23,5 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.get('/profile', 'UsersController.index')
 Route.post('/register', 'UsersController.create');
 Route.post('/login', 'UsersController.login');
-Route.post('/reset_password', 'ForgotPasswordController.store')
+Route.post('/forgot_password', 'ForgotPasswordController.store')
+Route.put('/reset_password', 'ForgotPasswordController.update')

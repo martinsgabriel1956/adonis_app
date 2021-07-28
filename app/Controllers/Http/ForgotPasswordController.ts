@@ -1,9 +1,7 @@
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import { DateTime } from "luxon";
-import Hash from "@ioc:Adonis/Core/Hash";
+import moment from 'moment';
 import { string } from '@ioc:Adonis/Core/Helpers'
-
-
 import Mail from "@ioc:Adonis/Addons/Mail";
 
 import User from "App/Models/User";
@@ -15,7 +13,7 @@ export default class ForgotPasswordController {
       const user = await User.findByOrFail("email", email);
 
       // user!.token = await Hash.make(user!.email);
-      user!.token = await string.generateRandom(10).toString();
+      user!.token = await string.generateRandom(32).toString();
       user!.token_created_at = DateTime.local();
 
       await user?.save();
@@ -31,6 +29,29 @@ export default class ForgotPasswordController {
           .from("martinsgabriel1956@gmail.com", "Gabriel Martins")
           .subject("Reset Password");
       });
+    } catch (err) {
+      return response.badRequest(err.message);
+    }
+  }
+
+  public async update({ request, response }: HttpContextContract) {
+    try {
+      const { token, password } = request.all();
+
+      const user = await User.findByOrFail("token", token);
+
+      const tokenExpired = moment()
+      .subtract('2', 'days')
+      .isAfter(user!.token_created_at);
+
+      if(tokenExpired) return response.badRequest("Token expired");
+
+      user.token = null;
+      user.token_created_at = null;
+      user.password = password;
+
+      await user.save();
+
     } catch (err) {
       return response.badRequest(err.message);
     }

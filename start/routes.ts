@@ -25,3 +25,5 @@ Route.post('/register', 'UsersController.create');
 Route.post('/login', 'UsersController.login');
 Route.post('/forgot_password', 'ForgotPasswordController.store')
 Route.put('/reset_password', 'ForgotPasswordController.update')
+Route.post('/files', 'FilesController.store')
+ 

@@ -1,6 +1,8 @@
-import { DateTime } from 'luxon'
+import { DateTime, DateInput } from 'luxon'
 import { BaseModel, column, beforeSave } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash';
+
+
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -14,6 +16,12 @@ export default class User extends BaseModel {
 
   @column()
   public password: string;
+
+  @column()
+  public token: string;
+
+  @column()
+  public token_created_at: DateTime;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;

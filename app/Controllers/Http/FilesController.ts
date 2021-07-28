@@ -4,6 +4,12 @@ import Application from '@ioc:Adonis/Core/Application';
 import File from 'App/Models/File';
 
 export default class FilesController {
+  public async show ({ params, response }: HttpContextContract) {
+    const file = await File.findOrFail(params.id);
+
+    return response.download(Application.tmpPath(`uploads/${file.file}`));
+  }
+
   public async store ({ request, response }: HttpContextContract) {
     try {
       if(!request.file('file')) return;
@@ -19,10 +25,6 @@ export default class FilesController {
       if(upload!.state !== 'moved') {
         throw upload?.errors;
       }
-
-      console.log(fileName, upload!.clientName, upload!.type, upload!.subtype);
-
-
 
       const file = await File.create({
         file: fileName,

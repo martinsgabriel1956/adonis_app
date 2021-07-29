@@ -17,8 +17,6 @@ export default class UsersController {
       email,
       password,
     });
-
-    
   }
   public async index() {
     return User.all();

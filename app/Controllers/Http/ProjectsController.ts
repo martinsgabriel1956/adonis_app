@@ -4,9 +4,7 @@ import Project from 'App/Models/Project';
 import ProjectValidator from 'App/Validators/ProjectValidator';
 
 export default class ProjectsController {
-  public async index ({request, response, auth}: HttpContextContract) {
-    await request.validate(ProjectValidator);
-
+  public async index ({request}: HttpContextContract) {
     const { page } = request.qs();
     
     const projects = await Project.query().preload('user').paginate(page, 10)
@@ -14,7 +12,7 @@ export default class ProjectsController {
     return projects;
   }
   
-  public async store ({request, response, auth}: HttpContextContract) {
+  public async store ({request, auth}: HttpContextContract) {
     await request.validate(ProjectValidator);
     
     const data = request.only(['title', 'description']);
@@ -24,9 +22,7 @@ export default class ProjectsController {
     return project;
   }
   
-  public async show ({ params, request }: HttpContextContract) {
-    await request.validate(ProjectValidator);
-    
+  public async show ({ params}: HttpContextContract) {
     const project = await Project.findByOrFail('id', params.id);
     
     await project!.load('user');

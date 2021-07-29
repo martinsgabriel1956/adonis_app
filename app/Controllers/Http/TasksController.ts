@@ -1,8 +1,12 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Task from 'App/Models/Task'
+import TaskValidator from 'App/Validators/TaskValidator';
+
 
 export default class TasksController {
   public async index ({params, request}: HttpContextContract) {
+    await request.validate(TaskValidator);
+
     const { page } = request.qs();
 
     const tasks = await Task.query().where('project_id', params.id).paginate(page, 10)
@@ -11,6 +15,8 @@ export default class TasksController {
   
   }
   public async store ({params, request}: HttpContextContract) {
+    await request.validate(TaskValidator);
+
     const data = request.only([
       'user_id',
       'title',
@@ -24,13 +30,17 @@ export default class TasksController {
     return task;
   }
 
-  public async show ({params}: HttpContextContract) {
+  public async show ({params, request}: HttpContextContract) {
+    await request.validate(TaskValidator);
+
     const task = await Task.findOrFail(params.id);
 
     return task;
   }
 
   public async update ({params, request}: HttpContextContract) {
+    await request.validate(TaskValidator);
+
     const task = await Task.findOrFail(params.id);
     const data = request.only([
       'user_id',
@@ -47,7 +57,9 @@ export default class TasksController {
     return task;
   }
 
-  public async destroy ({params}: HttpContextContract) {
+  public async destroy ({params, request}: HttpContextContract) {
+    await request.validate(TaskValidator);
+    
     const task = await Task.findOrFail(params.id);
 
     await task.delete();

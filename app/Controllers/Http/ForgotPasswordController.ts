@@ -6,13 +6,16 @@ import Mail from "@ioc:Adonis/Addons/Mail";
 
 import User from "App/Models/User";
 
+import ResetPasswordValidator from "App/Validators/ResetPasswordValidator";
+import ForgotPasswordValidator from "App/Validators/ForgotPasswordValidator";
 export default class ForgotPasswordController {
   public async store({ request, response }: HttpContextContract) {
     try {
+      await request.validate(ForgotPasswordValidator)
+
       const email = request.input("email");
       const user = await User.findByOrFail("email", email);
 
-      // user!.token = await Hash.make(user!.email);
       user!.token = await string.generateRandom(32).toString();
       user!.token_created_at = DateTime.local();
 
@@ -36,6 +39,8 @@ export default class ForgotPasswordController {
 
   public async update({ request, response }: HttpContextContract) {
     try {
+      await request.validate(ResetPasswordValidator)
+
       const { token, password } = request.all();
 
       const user = await User.findByOrFail("token", token);

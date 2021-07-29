@@ -1,4 +1,5 @@
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import UserValidator from "App/Validators/UserValidator";
 import User from "../../Models/User";
 
 export default class UsersController {
@@ -14,6 +15,8 @@ export default class UsersController {
       email,
       password,
     });
+
+    await request.validate(UserValidator);
   }
   public async index() {
     return User.all();

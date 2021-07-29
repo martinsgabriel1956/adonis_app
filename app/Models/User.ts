@@ -39,7 +39,7 @@ export default class User extends BaseModel {
 
   @hasMany(() => Project)
   public projects: HasMany<typeof Project>
-  
+
   @hasMany(() => Task)
   public tasks: HasMany<typeof Task>
 

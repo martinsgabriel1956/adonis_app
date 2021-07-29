@@ -14,6 +14,9 @@ export default class Task extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
+  @column()
+  public projectId: string
+
   @belongsTo(() => Project)
   public project: BelongsTo<typeof Project>
 

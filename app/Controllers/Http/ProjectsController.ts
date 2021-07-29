@@ -1,24 +1,50 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+
+import Project from 'App/Models/Project';
 
 export default class ProjectsController {
-  public async index ({}: HttpContextContract) {
+  public async index ({request, response, auth}: HttpContextContract) {
+    const { page } = request.qs();
+
+    const projects = await Project.query().preload('user').paginate(page, 10)
+
+    
+
+    return projects;
   }
 
-  public async create ({}: HttpContextContract) {
+  public async store ({request, response, auth}: HttpContextContract) {
+    const data = request.only(['title', 'description']);
+    
+    const project = await Project.create({...data, user_id: auth.user!.id});
+    
+    return project;
   }
-
-  public async store ({}: HttpContextContract) {
+  
+  public async show ({ params }: HttpContextContract) {
+    const project = await Project.findByOrFail('id', params.id);
+    
+    await project!.load('user');
+    await project!.load('task');
+    
+    return project;
   }
+  
+  public async update ({request, params}: HttpContextContract) {
+    const project = await Project.findByOrFail('id', params.id);
+    const data = request.only(['title', 'description']);
+    
+    project.merge(data);
 
-  public async show ({}: HttpContextContract) {
+    await project.save();
+
+    return project;
   }
+  
+  public async destroy ({ params }: HttpContextContract) {
+    const project = await Project.findByOrFail('id', params.id);
 
-  public async edit ({}: HttpContextContract) {
-  }
+    await project.delete();
 
-  public async update ({}: HttpContextContract) {
-  }
-
-  public async destroy ({}: HttpContextContract) {
   }
 }

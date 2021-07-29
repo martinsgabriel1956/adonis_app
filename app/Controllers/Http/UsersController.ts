@@ -4,6 +4,7 @@ import User from "../../Models/User";
 
 export default class UsersController {
   public async create({ request }: HttpContextContract) {
+    await request.validate(UserValidator);
     const { name, email, password } = request.only([
       "name",
       "email",
@@ -16,7 +17,7 @@ export default class UsersController {
       password,
     });
 
-    await request.validate(UserValidator);
+    
   }
   public async index() {
     return User.all();

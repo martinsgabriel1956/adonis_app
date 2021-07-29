@@ -15,7 +15,29 @@ export default class Task extends BaseModel {
   public updatedAt: DateTime
 
   @column()
-  public projectId: string
+  public project_id: string | number
+  
+  @column()
+  public projectId: string | number
+  
+  @column()
+  public user_id: string | number 
+ 
+  @column()
+  public userId: string | number
+  
+  @column()
+  public due_date: string | DateTime
+
+  @column()
+  public file_id: string | number
+  
+
+  @column()
+  public title: string
+
+  @column()
+  public description: string
 
   @belongsTo(() => Project)
   public project: BelongsTo<typeof Project>

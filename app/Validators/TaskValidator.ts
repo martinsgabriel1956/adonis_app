@@ -6,7 +6,7 @@ export default class TaskValidator {
 
   public schema = schema.create({
 		title: schema.string(),
-		due_date: schema.date(),
+		due_date: schema.date({ format: 'yyyy-MM-dd HH:mm:ss ' }, ),
 	});
 
   public messages = {};

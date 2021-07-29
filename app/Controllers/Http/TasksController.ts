@@ -1,7 +1,15 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Task from 'App/Models/Task'
 import TaskValidator from 'App/Validators/TaskValidator';
+import { DateTime } from 'luxon';
 
+type dataProps = {
+  user_id: string;
+  title: string;
+  description: string;
+  due_date: string | DateTime;
+  file_id: string;
+}
 
 export default class TasksController {
   public async index ({params, request}: HttpContextContract) {
@@ -12,12 +20,11 @@ export default class TasksController {
     const tasks = await Task.query().where('project_id', params.id).paginate(page, 10)
 
     return tasks;
-  
   }
   public async store ({params, request}: HttpContextContract) {
     await request.validate(TaskValidator);
 
-    const data = request.only([
+    const data: dataProps = request.only([
       'user_id',
       'title',
       'description',
